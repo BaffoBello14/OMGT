@@ -88,7 +88,7 @@ function matrix_games()
     variable_order = 1:m;
     
     % Dynamically create and display each inequality with the specified order
-    for i = 1:m+1
+    for i = 1:n
         inequality = '';
         for j = variable_order
             % Append each term in the inequality to the string
