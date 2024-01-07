@@ -17,7 +17,7 @@ tau = 0.1 ;
 eps0 = 5 ;
 tolerance = 1e-6 ;
 
-%% method
+%% penalty method
 
 
 eps = eps0;
