@@ -11,10 +11,10 @@ tolerance = 10^(-3) ;
 
 
 x = x0 ;
-%X=[Inf,Inf,Inf,Inf,Inf];
+X=[Inf,Inf,Inf,Inf,Inf];
 for ITER=0:100
     [v, g, H] = f(x);
- %   X=[X;ITER,x',v,norm(g)];
+    X=[X;ITER,x',v,norm(g)];
     % stopping criterion
     if norm(g) < tolerance
         break
@@ -28,12 +28,16 @@ for ITER=0:100
     end
     % new point
     x = x + t*d; 
+
+    ITER
+    x
+    v
+    norm(g)
    
 end
 
-x
-v
-norm(g)
+X
+
 
 function [v, g, H] = f(x) 
 
@@ -44,5 +48,15 @@ g = [ 8*x(1)^3 + 4*x(1) + x(2) - 3
 
 H = [ 24*x(1)^2+4   1
           1        36*x(2)^2+8];
+
+%% controllo calcolo gradiente ed hessiana
+%syms x1 x2;
+%v_symbolic = 2*x1^4 + 3*x2^4 + 2*x1^2 + 4*x2^2 + x1*x2 - 3*x1 - 2*x2;
+    
+% Calcolo del gradiente
+%g_symbolic = gradient(v_symbolic, [x1, x2])
+    
+% Calcolo della matrice Hessiana
+%H_symbolic = hessian(v_symbolic, [x1, x2])         
 
 end
