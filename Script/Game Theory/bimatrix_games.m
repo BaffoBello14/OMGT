@@ -1,7 +1,7 @@
-%ATTENZIONE: GLI INDICI PER LA PURE E IL BEST RESPONSE FANNO RIFERIMENTO
-%            ALLA MATRICE RIDOTTA
-%            GLI INDICI DEL KKT FANNO INVECE RIFERIMENTO ALLA MATRICE
-%            ORIGINALE
+% ATTENZIONE:   GLI INDICI PER LA PURE E IL BEST RESPONSE FANNO RIFERIMENTO
+%               ALLA MATRICE RIDOTTA -> VANNO MESSI QUELLI ORIGINALI NELLA SOLUZIONE
+%               GLI INDICI DEL KKT FANNO INVECE RIFERIMENTO ALLA MATRICE
+%               ORIGINALE
 
 function bimatrix_games()
 
@@ -34,10 +34,10 @@ function bimatrix_games()
     P1 = salva1;
     P2 = salva2;
     
-    disp('Matrice P1 dopo l''eliminazione:');
+    disp('Reduced matrix P1:');
     disp(P1_new);
     
-    disp('Matrice P2 dopo l''eliminazione:');
+    disp('Reduced matrix P2:');
     disp(P2_new);
     
     pureNashEquilibria(P1_new, P2_new);
@@ -49,8 +49,9 @@ function bimatrix_games()
     mixedNashEquilibria(P2_new, 1);
 
     disp("Mixed with KKT:")
-    mixedKKT(P1, P2);
-
+    for i = 1:10 % Viene fatto più volte così da trovare tutti i casi
+        mixedKKT(P1, P2);
+    end
 end
 
 function [P1_new, P2_new] = strictly_dominated_strategies(P1, P2)
@@ -61,6 +62,7 @@ function [P1_new, P2_new] = strictly_dominated_strategies(P1, P2)
     % Elimina le righe in base alla condizione specificata
     for i = 1:size(P1, 1)
         if any(all(P1 < P1(i, :), 2))
+            disp(['Strategy ', num2str(i), ' for Player 1 is strictly dominated by strategy ', num2str(find(all(P1 < P1(i, :), 2))), '.']);
             P1_new(i, :) = [];
             P2_new(i, :) = [];
             % Dopo l'eliminazione di una riga, ricomincia il loop
@@ -72,6 +74,7 @@ function [P1_new, P2_new] = strictly_dominated_strategies(P1, P2)
     % Elimina le colonne in base alla condizione specificata
     for i = 1:size(P2, 2)
         if any(all(P2 < P2(:, i), 1))
+            disp(['Strategy ', num2str(i), ' for Player 2 is strictly dominated by strategy ', num2str(find(all(P2 < P2(:, i), 1))), '.']);
             P1_new(:, i) = [];
             P2_new(:, i) = [];
             % Dopo l'eliminazione di una colonna, ricomincia il loop
@@ -85,10 +88,10 @@ function pureNashEquilibria(matrice1, matrice2)
     [num_righe_1, num_colonne_1] = size(matrice1);
     result_matrix_1 = [];
     
-    for i = 1:num_righe_1
-        riga = matrice1(i, :);
-        minimo = min(riga);
-        indici_minimi = find(riga == minimo);
+    for i = 1:num_colonne_1
+        colonna = matrice1(i, :);
+        minimo = min(colonna);
+        indici_minimi = find(colonna == minimo);
         
         for j = 1:length(indici_minimi)
             result_matrix_1 = [result_matrix_1; i, indici_minimi(j)];
@@ -102,10 +105,10 @@ function pureNashEquilibria(matrice1, matrice2)
     [num_righe_2, num_colonne_2] = size(matrice2);
     result_matrix_2 = [];
     
-    for j = 1:num_colonne_2
-        colonna = matrice2(:, j);
-        minimo = min(colonna);
-        indici_minimi = find(colonna == minimo);
+    for j = 1:num_righe_2
+        riga = matrice2(:, j);
+        minimo = min(riga);
+        indici_minimi = find(riga == minimo);
         
         for i = 1:length(indici_minimi)
             result_matrix_2 = [result_matrix_2; indici_minimi(i), j];
@@ -215,5 +218,3 @@ function mixedKKT(C1, C2)
     disp("y:")
     disp(y)
 end
-
-
