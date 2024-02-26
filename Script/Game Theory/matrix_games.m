@@ -153,6 +153,7 @@ function [C_new] = strictly_dominated_strategies(C)
     % Elimina le righe in base alla condizione specificata
     for i = 1:size(C, 1)
         if any(all(C < C(i, :), 2))
+            disp(['Strategy ', num2str(i), ' for Player 1 is strictly dominated by strategy ', num2str(find(all(C < C(i, :), 2))), '.']);
             C_new(i, :) = [];
             % Dopo l'eliminazione di una riga, ricomincia il loop
             % dalla prima riga
@@ -163,6 +164,7 @@ function [C_new] = strictly_dominated_strategies(C)
     % Elimina le colonne in base alla condizione specificata
     for i = 1:size(C, 2)
         if any(all(C > C(:, i), 1))
+            disp(['Strategy ', num2str(i), ' for Player 2 is strictly dominated by strategy ', num2str(find(all(C > C(:, i), 1))), '.']);
             C_new(:, i) = [];
             % Dopo l'eliminazione di una colonna, ricomincia il loop
             % dalla prima colonna
