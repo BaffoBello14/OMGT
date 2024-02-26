@@ -134,6 +134,9 @@ function matrix_games()
     
     % Calcola la soluzione
     [sol, Val,exitflag, output, lambda] = linprog(c, A,b, Aeq, beq, Ib, ub);
+    disp('sol:')
+    disp(sol(end, :)); % Stampa l'ultima riga di 'sol'
+    disp('questa è l''ultima riga sol, che è v=w')
     
     % Estrai x
     x = sol(1:m);
