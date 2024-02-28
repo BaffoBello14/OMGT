@@ -85,48 +85,46 @@ function [P1_new, P2_new] = strictly_dominated_strategies(P1, P2)
 end
 
 function pureNashEquilibria(matrice1, matrice2)
-    [num_righe_1, num_colonne_1] = size(matrice1);
-    result_matrix_1 = [];
-    
-    for i = 1:num_colonne_1
-        colonna = matrice1(i, :);
-        minimo = min(colonna);
-        indici_minimi = find(colonna == minimo);
-        
-        for j = 1:length(indici_minimi)
-            result_matrix_1 = [result_matrix_1; i, indici_minimi(j)];
+    [num_righe1, num_colonne1] = size(matrice1);
+    indici_minimi_matrice1 = [];
+
+    % Trova gli indici minimi per le colonne della matrice1
+    for j = 1:num_colonne1
+        colonna_attuale = matrice1(:, j);
+        valore_minimo = min(colonna_attuale);
+        indici_minimi_colonna = find(colonna_attuale == valore_minimo);
+        for i = 1:length(indici_minimi_colonna)
+            indici_minimi_matrice1 = [indici_minimi_matrice1; indici_minimi_colonna(i), j];
         end
     end
 
-    disp('Migliore Strategia Player 1');
-    disp(result_matrix_1);
+    disp('Best Strategy for Player 1:');
+    disp(indici_minimi_matrice1);
 
-    
-    [num_righe_2, num_colonne_2] = size(matrice2);
-    result_matrix_2 = [];
-    
-    for j = 1:num_righe_2
-        riga = matrice2(:, j);
-        minimo = min(riga);
-        indici_minimi = find(riga == minimo);
-        
-        for i = 1:length(indici_minimi)
-            result_matrix_2 = [result_matrix_2; indici_minimi(i), j];
+    [num_righe2, num_colonne2] = size(matrice2);
+    indici_minimi_matrice2 = [];
+
+    % Trova gli indici minimi per le righe della matrice2
+    for i = 1:num_righe2
+        riga_attuale = matrice2(i, :);
+        valore_minimo = min(riga_attuale);
+        indici_minimi_riga = find(riga_attuale == valore_minimo);
+        for j = 1:length(indici_minimi_riga)
+            indici_minimi_matrice2 = [indici_minimi_matrice2; i, indici_minimi_riga(j)];
         end
     end
 
-    disp('Migliore Strategia Player 2');
-    disp(result_matrix_2);
+    disp('Best Strategy for Player 2:');
+    disp(indici_minimi_matrice2);
 
-    % Confronto delle strategie di Nash
-    intersezione = intersect(result_matrix_1, result_matrix_2, 'rows');
-    
-    if ~isempty(intersezione)
-        disp('Strategie pure di Nash:');
-        disp(intersezione);
+    % Calcola l'intersezione tra gli indici minimi delle due matrici
+    intersezione = intersect(indici_minimi_matrice1, indici_minimi_matrice2, 'rows');
+
+    if isempty(intersezione)
+        disp('There are no pure Nash equilibria.');
     else
-        disp('Non ci sono strategie pure di Nash');
-        disp(' ');
+        disp('The pure Nash equilibria are:');
+        disp(intersezione);
     end
 end
 
