@@ -10,8 +10,8 @@ global Q c A b eps;
 
 Q = [ 1 0 ; 0 2 ] ;
 c = [ -3 ; -4 ] ;
-A = [-2 1 ; 1 1 ; 0 -1 ];
-b = [ 0 ; 4 ; 0 ];
+A = [2 1; -1 -1; -1 0 ];
+b = [ 4;-1;0];
 
 tau = 0.1 ;
 eps0 = 5 ;
@@ -21,7 +21,7 @@ tolerance = 1e-6 ;
 
 
 eps = eps0;
-x = [0;0];
+x = [4;0];
 iter = 0;
 SOL=[];
 
@@ -49,7 +49,13 @@ function v= p_eps(x)
 
     global Q c A b eps;
 
-    v = 0.5*x'*Q*x + c'*x ;
+    %v = 0.5*x'*Q*x + c'*x ;
+
+    % se la funzione non è scrivibile in forma matriciale come sopra (in
+    % forma quadratica), allora scriverla semplicemente nella forma
+    % sottostante,cioè v = funzione
+
+    v = x(1)^2 - log(x(1)+x(2));
   
 
     for i = 1 : size(A,1)
