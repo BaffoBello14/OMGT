@@ -29,43 +29,43 @@ function matrix_games()
     disp(nuovaMatrice)
     disp(" ")
 
-    % Trova la posizione del valore minimo per ogni riga
+    % Trova il minimo per ogni colonna (Player Righe)
     [num_righe_1, num_colonne_1] = size(nuovaMatrice);
     result_matrix_1 = [];
-    
-    for i = 1:num_righe_1
-        riga = nuovaMatrice(i, :);
-        minimo = min(riga);
-        indici_minimi = find(riga == minimo);
+
+    for j = 1:num_colonne_1
+        colonna = nuovaMatrice(:, j);
+        minimo = min(colonna);
+        indici_minimi = find(colonna == minimo);
         
-        for j = 1:length(indici_minimi)
-            result_matrix_1 = [result_matrix_1; i, indici_minimi(j)];
+        for i = 1:length(indici_minimi)
+            result_matrix_1 = [result_matrix_1; indici_minimi(i), j];
         end
     end
 
-    disp('Migliore Strategia Player Righe');
+    disp('Migliore Strategia Player Righe (minimo sulle colonne)');
     disp(result_matrix_1);
 
-    % Trova la posizione del valore massimo per ogni colonna
+    % Trova il massimo per ogni riga (Player Colonne)
     [num_righe_2, num_colonne_2] = size(nuovaMatrice);
     result_matrix_2 = [];
-    
-    for j = 1:num_colonne_2
-        colonna = nuovaMatrice(:, j);
-        massimo = max(colonna);
-        indici_massimi = find(colonna == massimo);
+
+    for i = 1:num_righe_2
+        riga = nuovaMatrice(i, :);
+        massimo = max(riga);
+        indici_massimi = find(riga == massimo);
         
-        for i = 1:length(indici_massimi)
-            result_matrix_2 = [result_matrix_2; indici_massimi(i), j];
+        for j = 1:length(indici_massimi)
+            result_matrix_2 = [result_matrix_2; i, indici_massimi(j)];
         end
     end
 
-    disp('Migliore Strategia Player Colonne');
+    disp('Migliore Strategia Player Colonne (massimo sulle righe)');
     disp(result_matrix_2);
 
     % Confronto delle strategie di Nash
     intersezione = intersect(result_matrix_1, result_matrix_2, 'rows');
-    
+
     if ~isempty(intersezione)
         disp('Strategie pure di Nash:');
         disp(intersezione);
