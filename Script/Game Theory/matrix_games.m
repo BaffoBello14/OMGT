@@ -1,15 +1,12 @@
-%ATTENZIONE: GLI INDICI PER LA PURE FANNO ALLA MATRICE RIDOTTA        
-%            GLI INDICI DEL MIXED FANNO INVECE RIFERIMENTO ALLA MATRICE
-%            ORIGINALE
-
 function matrix_games()
 
+    % 
     clc, clear all
     
     C = [
-    5 4 3 5
-    6 7 8 2
-    5 3 4 4
+        5 4 3 5
+        6 7 8 2
+        6 3 4 4
     ];
 
     salva = C;
@@ -30,11 +27,11 @@ function matrix_games()
     disp(" ")
 
     % Trova il minimo per ogni colonna (Player Righe)
-    [num_righe_1, num_colonne_1] = size(nuovaMatrice);
+    [num_righe_1, num_colonne_1] = size(C);
     result_matrix_1 = [];
 
     for j = 1:num_colonne_1
-        colonna = nuovaMatrice(:, j);
+        colonna = C(:, j);
         minimo = min(colonna);
         indici_minimi = find(colonna == minimo);
         
@@ -43,15 +40,12 @@ function matrix_games()
         end
     end
 
-    disp('Migliore Strategia Player Righe (minimo sulle colonne)');
-    disp(result_matrix_1);
-
     % Trova il massimo per ogni riga (Player Colonne)
-    [num_righe_2, num_colonne_2] = size(nuovaMatrice);
+    [num_righe_2, num_colonne_2] = size(C);
     result_matrix_2 = [];
 
     for i = 1:num_righe_2
-        riga = nuovaMatrice(i, :);
+        riga = C(i, :);
         massimo = max(riga);
         indici_massimi = find(riga == massimo);
         
@@ -59,9 +53,6 @@ function matrix_games()
             result_matrix_2 = [result_matrix_2; i, indici_massimi(j)];
         end
     end
-
-    disp('Migliore Strategia Player Colonne (massimo sulle righe)');
-    disp(result_matrix_2);
 
     % Confronto delle strategie di Nash
     intersezione = intersect(result_matrix_1, result_matrix_2, 'rows');
@@ -116,37 +107,41 @@ function matrix_games()
     end
     % Remove the trailing comma and space, then append '>= 0'
     disp([nonnegativity(1:end-2) ' >= 0'])
-    
-    % Definisci c
-    c = [zeros(m,1);1];
-    
-    % Definisci A
-    A = [C', -ones(n,1)];
-    b = zeros(n,1);
-    
-    % Definisci Aeq
-    Aeq = [ones(1,m),0];
-    beq = 1;
-    
-    % Definisci Ib
-    Ib = [zeros(m,1);-inf];
-    ub = [];
-    
-    % Calcola la soluzione
-    [sol, Val,exitflag, output, lambda] = linprog(c, A,b, Aeq, beq, Ib, ub);
-    disp('sol:')
-    disp(sol(end, :)); % Stampa l'ultima riga di 'sol'
-    disp('questa è l''ultima riga sol, che è v=w')
-    
-    % Estrai x
-    x = sol(1:m);
-    disp('x:')
-    disp(x)
-    
-    % Estrai y
-    y = lambda.ineqlin;
-    disp('y:')
-    disp(y)
+
+    if size(intersezione, 1) == 2 % Caso Particolare
+        disp('Since the problem is linear then any convex combination alpha(x^1, v^1) + (1 - alpha)(x^2, v^2), alpha E [0, 1] is an optimal solution');
+    else
+        % Definisci c
+        c = [zeros(m,1);1];
+        
+        % Definisci A
+        A = [C', -ones(n,1)];
+        b = zeros(n,1);
+        
+        % Definisci Aeq
+        Aeq = [ones(1,m),0];
+        beq = 1;
+        
+        % Definisci Ib
+        Ib = [zeros(m,1);-inf];
+        ub = [];
+        
+        % Calcola la soluzione
+        [sol, Val,exitflag, output, lambda] = linprog(c, A,b, Aeq, beq, Ib, ub);
+        disp('sol:')
+        disp(sol(end, :)); % Stampa l'ultima riga di 'sol'
+        disp('questa è l''ultima riga sol, che è v=w')
+        
+        % Estrai x
+        x = sol(1:m);
+        disp('x:')
+        disp(x)
+        
+        % Estrai y
+        y = lambda.ineqlin;
+        disp('y:')
+        disp(y)
+    end
 end
 
 function [C_new] = strictly_dominated_strategies(C)

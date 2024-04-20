@@ -1,8 +1,3 @@
-% ATTENZIONE:   GLI INDICI PER LA PURE E IL BEST RESPONSE FANNO RIFERIMENTO
-%               ALLA MATRICE RIDOTTA -> VANNO MESSI QUELLI ORIGINALI NELLA SOLUZIONE
-%               GLI INDICI DEL KKT FANNO INVECE RIFERIMENTO ALLA MATRICE
-%               ORIGINALE
-
 function bimatrix_games()
 
     clc, clear all
@@ -40,7 +35,7 @@ function bimatrix_games()
     disp('Reduced matrix P2:');
     disp(P2_new);
     
-    pureNashEquilibria(P1_new, P2_new);
+    pureNashEquilibria(P1, P2);
 
     disp("Mixed for P1:")
     mixedNashEquilibria(P1_new, 0);
@@ -98,9 +93,6 @@ function pureNashEquilibria(matrice1, matrice2)
         end
     end
 
-    disp('Best Strategy for Player 1:');
-    disp(indici_minimi_matrice1);
-
     [num_righe2, num_colonne2] = size(matrice2);
     indici_minimi_matrice2 = [];
 
@@ -113,9 +105,6 @@ function pureNashEquilibria(matrice1, matrice2)
             indici_minimi_matrice2 = [indici_minimi_matrice2; i, indici_minimi_riga(j)];
         end
     end
-
-    disp('Best Strategy for Player 2:');
-    disp(indici_minimi_matrice2);
 
     % Calcola l'intersezione tra gli indici minimi delle due matrici
     intersezione = intersect(indici_minimi_matrice1, indici_minimi_matrice2, 'rows');
